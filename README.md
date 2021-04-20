@@ -9,7 +9,7 @@ Installation steps:
 
 2] Extract PXPStarCitizenEasyLaunch.zip to any folder
 
-3] Use "Star Citizen Easy Launcher.exe" to launch SC each time you
+3] Use "Star Citizen Easy Launcher.exe" to launch SC each time you want to play StarCitizen
 
 
 The App will allow you select your RSI Launcher and StarCitizen root folders and then automatically backs up your control mapping files, Deletes shaders, and launches the RSI Launcher.exe program and closes itself.  
