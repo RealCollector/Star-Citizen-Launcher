@@ -7,12 +7,23 @@
     <StartupObject>Sub Main</StartupObject>
     <UseWindowsForms>true</UseWindowsForms>
     <MyType>WindowsForms</MyType>
+    <ApplicationManifest>My Project\app.manifest</ApplicationManifest>
+    <Authors>Nate Schnase,Drac, Wizy, Chef</Authors>
+    <Company>RealCollectorGaming</Company>
+    <RepositoryUrl>https://github.com/RealCollector/Star-Citizen-Launcher</RepositoryUrl>
+    <RepositoryType>GIT</RepositoryType>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <OutputPath>C:\Users\Nate Schnase\Documents\PXP Star Citizen Easy Launch\</OutputPath>
   </PropertyGroup>
 
   <ItemGroup>
     <Import Include="System.Data" />
     <Import Include="System.Drawing" />
+    <Import Include="System.Text" />
     <Import Include="System.Windows.Forms" />
+    <Import Include="System.Windows.Forms.Design" />
   </ItemGroup>
 
   <ItemGroup>

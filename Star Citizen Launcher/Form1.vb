@@ -1,5 +1,5 @@
 ﻿Imports System.IO
-Imports System.Collections
+
 Public Class Form1
 
 
@@ -18,7 +18,7 @@ Public Class Form1
 
         ApplicationLocation()   'finds location of application for config path and storage
         VerifyConfig()          'verifys file exists and stores data to public variables
-        VerifyBackupDir()       'verify/create backup directory
+
 
         'Nothing really happens until you hit the launch SC button at this point.  
         'need to add some visual pizzaz
@@ -55,6 +55,7 @@ Public Class Form1
     End Sub
 
     Private Sub Btn_Launch_Click(sender As Object, e As EventArgs) Handles Btn_Launch.Click
+        VerifyBackupDir()       'verify/create backup directory
         BackupFiles()
         Dim proc As New System.Diagnostics.Process()
         Dim path As String = lDir + "\RSI Launcher.exe"
@@ -85,15 +86,15 @@ Public Class Form1
     Private Sub ApplicationLocation()
         'gets location of application and uses that directory to house and or create the config and temp files as needed.
 
-        Dim pArray(3) As String
+        Dim pArray(2) As String
         Dim AppPath As String = Application.StartupPath() 'get application install path for use with config.txt and temp0.txt
 
         pArray(0) = AppPath
         pArray(1) = "config.txt"
-        pArray(2) = "temp0.txt"
+
 
         cFile = pArray(0) + pArray(1)
-        tFile = pArray(0) + pArray(2)
+
     End Sub
     Private Sub ReadConfig(ByVal CPath As String)    'reads config file into memory and to array, writes to temp0 file
         Dim lineArray() As String = System.IO.File.ReadAllLines(CPath) 'pull lines into array
