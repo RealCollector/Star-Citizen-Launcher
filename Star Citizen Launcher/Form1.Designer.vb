@@ -22,11 +22,11 @@ Partial Class Form1
     'Do not modify it using the code editor.
     <System.Diagnostics.DebuggerStepThrough()>
     Private Sub InitializeComponent()
+        Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(Form1))
         Me.Label1 = New System.Windows.Forms.Label()
         Me.Btn_GetLaunchPath = New System.Windows.Forms.Button()
         Me.Label2 = New System.Windows.Forms.Label()
         Me.Btn_GetGamePath = New System.Windows.Forms.Button()
-        Me.Btn_Backup = New System.Windows.Forms.Button()
         Me.FolderBrowserL = New System.Windows.Forms.FolderBrowserDialog()
         Me.Lbl_LaunchPath = New System.Windows.Forms.Label()
         Me.Btn_Launch = New System.Windows.Forms.Button()
@@ -38,55 +38,59 @@ Partial Class Form1
         'Label1
         '
         Me.Label1.AutoSize = True
-        Me.Label1.Font = New System.Drawing.Font("Arial", 14.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point)
-        Me.Label1.Location = New System.Drawing.Point(69, 38)
+        Me.Label1.BackColor = System.Drawing.Color.Transparent
+        Me.Label1.FlatStyle = System.Windows.Forms.FlatStyle.Flat
+        Me.Label1.Font = New System.Drawing.Font("Times New Roman", 18.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point)
+        Me.Label1.Image = CType(resources.GetObject("Label1.Image"), System.Drawing.Image)
+        Me.Label1.Location = New System.Drawing.Point(49, 163)
         Me.Label1.Name = "Label1"
-        Me.Label1.Size = New System.Drawing.Size(208, 22)
+        Me.Label1.Size = New System.Drawing.Size(228, 26)
         Me.Label1.TabIndex = 1
-        Me.Label1.Text = "Select Launcher Path"
+        Me.Label1.Text = "                                    "
         '
         'Btn_GetLaunchPath
         '
-        Me.Btn_GetLaunchPath.Location = New System.Drawing.Point(283, 34)
+        Me.Btn_GetLaunchPath.BackColor = System.Drawing.Color.DimGray
+        Me.Btn_GetLaunchPath.FlatAppearance.BorderColor = System.Drawing.Color.Silver
+        Me.Btn_GetLaunchPath.FlatAppearance.BorderSize = 10
+        Me.Btn_GetLaunchPath.Font = New System.Drawing.Font("Segoe UI", 14.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point)
+        Me.Btn_GetLaunchPath.ForeColor = System.Drawing.SystemColors.ButtonHighlight
+        Me.Btn_GetLaunchPath.Location = New System.Drawing.Point(283, 160)
         Me.Btn_GetLaunchPath.Name = "Btn_GetLaunchPath"
         Me.Btn_GetLaunchPath.Size = New System.Drawing.Size(127, 34)
-        Me.Btn_GetLaunchPath.TabIndex = 2
-        Me.Btn_GetLaunchPath.Text = "Browse"
-        Me.Btn_GetLaunchPath.UseVisualStyleBackColor = True
+        Me.Btn_GetLaunchPath.TabIndex = 4
+        Me.Btn_GetLaunchPath.Text = "Select"
+        Me.Btn_GetLaunchPath.UseVisualStyleBackColor = False
         '
         'Label2
         '
         Me.Label2.AutoSize = True
+        Me.Label2.BackColor = System.Drawing.Color.Transparent
         Me.Label2.Font = New System.Drawing.Font("Arial", 14.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point)
-        Me.Label2.Location = New System.Drawing.Point(104, 106)
+        Me.Label2.Image = CType(resources.GetObject("Label2.Image"), System.Drawing.Image)
+        Me.Label2.Location = New System.Drawing.Point(82, 229)
         Me.Label2.Name = "Label2"
-        Me.Label2.Size = New System.Drawing.Size(173, 22)
+        Me.Label2.Size = New System.Drawing.Size(195, 22)
         Me.Label2.TabIndex = 3
-        Me.Label2.Text = "Select Game Path"
+        Me.Label2.Text = "                                     " & Global.Microsoft.VisualBasic.ChrW(13) & Global.Microsoft.VisualBasic.ChrW(10)
         '
         'Btn_GetGamePath
         '
-        Me.Btn_GetGamePath.Location = New System.Drawing.Point(283, 99)
+        Me.Btn_GetGamePath.BackColor = System.Drawing.Color.DimGray
+        Me.Btn_GetGamePath.Font = New System.Drawing.Font("Segoe UI", 14.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point)
+        Me.Btn_GetGamePath.ForeColor = System.Drawing.SystemColors.ButtonHighlight
+        Me.Btn_GetGamePath.Location = New System.Drawing.Point(283, 225)
         Me.Btn_GetGamePath.Name = "Btn_GetGamePath"
         Me.Btn_GetGamePath.Size = New System.Drawing.Size(127, 34)
         Me.Btn_GetGamePath.TabIndex = 4
-        Me.Btn_GetGamePath.Text = "Browse"
-        Me.Btn_GetGamePath.UseVisualStyleBackColor = True
-        '
-        'Btn_Backup
-        '
-        Me.Btn_Backup.Location = New System.Drawing.Point(283, 156)
-        Me.Btn_Backup.Name = "Btn_Backup"
-        Me.Btn_Backup.Size = New System.Drawing.Size(127, 34)
-        Me.Btn_Backup.TabIndex = 5
-        Me.Btn_Backup.Text = "Browse"
-        Me.Btn_Backup.UseVisualStyleBackColor = True
+        Me.Btn_GetGamePath.Text = "Select"
+        Me.Btn_GetGamePath.UseVisualStyleBackColor = False
         '
         'Lbl_LaunchPath
         '
         Me.Lbl_LaunchPath.AutoSize = True
         Me.Lbl_LaunchPath.BackColor = System.Drawing.SystemColors.HighlightText
-        Me.Lbl_LaunchPath.Location = New System.Drawing.Point(430, 45)
+        Me.Lbl_LaunchPath.Location = New System.Drawing.Point(430, 171)
         Me.Lbl_LaunchPath.Name = "Lbl_LaunchPath"
         Me.Lbl_LaunchPath.Size = New System.Drawing.Size(73, 15)
         Me.Lbl_LaunchPath.TabIndex = 6
@@ -96,7 +100,7 @@ Partial Class Form1
         '
         Me.Btn_Launch.Font = New System.Drawing.Font("Segoe UI", 12.0!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point)
         Me.Btn_Launch.ForeColor = System.Drawing.Color.Blue
-        Me.Btn_Launch.Location = New System.Drawing.Point(283, 220)
+        Me.Btn_Launch.Location = New System.Drawing.Point(949, 317)
         Me.Btn_Launch.Name = "Btn_Launch"
         Me.Btn_Launch.Size = New System.Drawing.Size(127, 34)
         Me.Btn_Launch.TabIndex = 7
@@ -106,18 +110,21 @@ Partial Class Form1
         'Label3
         '
         Me.Label3.AutoSize = True
+        Me.Label3.BackColor = System.Drawing.Color.Transparent
         Me.Label3.Font = New System.Drawing.Font("Arial", 14.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point)
-        Me.Label3.Location = New System.Drawing.Point(48, 160)
+        Me.Label3.ForeColor = System.Drawing.Color.Transparent
+        Me.Label3.Image = CType(resources.GetObject("Label3.Image"), System.Drawing.Image)
+        Me.Label3.Location = New System.Drawing.Point(67, 316)
         Me.Label3.Name = "Label3"
-        Me.Label3.Size = New System.Drawing.Size(229, 22)
+        Me.Label3.Size = New System.Drawing.Size(210, 22)
         Me.Label3.TabIndex = 8
-        Me.Label3.Text = "Select Backup Location"
+        Me.Label3.Text = "                                        "
         '
         'Lbl_GamePath
         '
         Me.Lbl_GamePath.AutoSize = True
         Me.Lbl_GamePath.BackColor = System.Drawing.SystemColors.HighlightText
-        Me.Lbl_GamePath.Location = New System.Drawing.Point(430, 109)
+        Me.Lbl_GamePath.Location = New System.Drawing.Point(430, 235)
         Me.Lbl_GamePath.Name = "Lbl_GamePath"
         Me.Lbl_GamePath.Size = New System.Drawing.Size(95, 15)
         Me.Lbl_GamePath.TabIndex = 10
@@ -127,7 +134,7 @@ Partial Class Form1
         '
         Me.Lbl_BackupPath.AutoSize = True
         Me.Lbl_BackupPath.BackColor = System.Drawing.SystemColors.HighlightText
-        Me.Lbl_BackupPath.Location = New System.Drawing.Point(430, 166)
+        Me.Lbl_BackupPath.Location = New System.Drawing.Point(283, 323)
         Me.Lbl_BackupPath.Name = "Lbl_BackupPath"
         Me.Lbl_BackupPath.Size = New System.Drawing.Size(95, 15)
         Me.Lbl_BackupPath.TabIndex = 11
@@ -137,13 +144,13 @@ Partial Class Form1
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(7.0!, 15.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(1339, 329)
+        Me.BackgroundImage = CType(resources.GetObject("$this.BackgroundImage"), System.Drawing.Image)
+        Me.ClientSize = New System.Drawing.Size(1112, 377)
         Me.Controls.Add(Me.Lbl_BackupPath)
         Me.Controls.Add(Me.Lbl_GamePath)
         Me.Controls.Add(Me.Label3)
         Me.Controls.Add(Me.Btn_Launch)
         Me.Controls.Add(Me.Lbl_LaunchPath)
-        Me.Controls.Add(Me.Btn_Backup)
         Me.Controls.Add(Me.Btn_GetGamePath)
         Me.Controls.Add(Me.Label2)
         Me.Controls.Add(Me.Btn_GetLaunchPath)
@@ -158,7 +165,6 @@ Partial Class Form1
     Friend WithEvents Btn_GetLaunchPath As Button
     Friend WithEvents Label2 As Label
     Friend WithEvents Btn_GetGamePath As Button
-    Friend WithEvents Btn_Backup As Button
     Friend WithEvents FolderBrowserL As FolderBrowserDialog
     Friend WithEvents Lbl_LaunchPath As Label
     Friend WithEvents Btn_Launch As Button

@@ -8,20 +8,23 @@ Public Class Form1
     Public lDir As String   'launcher path
     Public gDir As String   'game directory path
     Public bDir As String   'backup directory path
-    Public cFile As String = "F:\VIsual Studio Stuff\Star Citizen Launcher\config.txt"    '"C:\Program Files (x86)\Easy SC Launch\config.txt"   'config directory
-    Public tFile As String = "F:\VIsual Studio Stuff\Star Citizen Launcher\temp0.txt"
+    Public cFile As String  'config File Path
+    Public tFile As String  'temp0.txt file path
 
 
 
 
     Private Sub Form1_Load(sender As Object, e As EventArgs) Handles MyBase.Load
 
+        ApplicationLocation()   'finds location of application for config path and storage
+        VerifyConfig()          'verifys file exists and stores data to public variables
+        VerifyBackupDir()       'verify/create backup directory
 
-        VerifyConfig() 'verifys file exists and stores data to public variables
-        VerifyBackupDir()   'verify/create backup directory
+        'Nothing really happens until you hit the launch SC button at this point.  
+        'need to add some visual pizzaz
 
-        'write data from temp0.txt to config.txt
-        'delete temp0.txt
+
+
 
 
 
@@ -33,7 +36,7 @@ Public Class Form1
         If FolderBrowserL.ShowDialog() = DialogResult.OK Then
             lDir = FolderBrowserL.SelectedPath
             Lbl_LaunchPath.Text = lDir
-            UpdateConfig()
+            UpdateConfig(cFile)
         End If
 
     End Sub
@@ -42,52 +45,72 @@ Public Class Form1
         If FolderBrowserL.ShowDialog() = DialogResult.OK Then
             gDir = FolderBrowserL.SelectedPath
             Lbl_GamePath.Text = gDir
-            UpdateConfig()
-        End If
-
-    End Sub
-    Private Sub Btn_Backup_Click(sender As Object, e As EventArgs) Handles Btn_Backup.Click
-
-        If FolderBrowserL.ShowDialog() = DialogResult.OK Then
-            bDir = FolderBrowserL.SelectedPath
+            Dim di = New DirectoryInfo(gDir)
+            bDir = di.Parent.FullName
+            bDir = bDir + "\SC-Backup"
             Lbl_BackupPath.Text = bDir
-            UpdateConfig()
+            UpdateConfig(cFile)
         End If
 
     End Sub
+
     Private Sub Btn_Launch_Click(sender As Object, e As EventArgs) Handles Btn_Launch.Click
         BackupFiles()
+        Dim proc As New System.Diagnostics.Process()
+        Dim path As String = lDir + "\RSI Launcher.exe"
+
+        If File.Exists(path) Then 'check if file exists and delete it if its already there
+            proc = Process.Start(path, "")
+            MyBase.Dispose()
+
+        Else
+            MessageBox.Show("Could not find RSI Launcher.exe in Selected Directory")
+        End If
+
     End Sub
     Private Sub VerifyConfig()
         If File.Exists(cFile) Then
             'make sure files exist and read the saved data into the path variables
-            ReadConfig() 'Gets data from stored file
+            ReadConfig(cFile) 'Gets data from stored file
         Else
             'create the config file and set default paths
             Dim stp As New StreamWriter(cFile, True)
-            stp.WriteLine("D:\Program Files\Roberts Space Industries\RSI Launcher") 'Launcher Path
-            stp.WriteLine("D:\Program Files\Roberts Space Industries\Star Citizen") 'Game Folder Path
-            stp.WriteLine("D:\Program Files\Roberts Space Industries\SC-Backups") 'backup path
+            stp.WriteLine("C:\Program Files\Roberts Space Industries\RSI Launcher") 'Launcher Path
+            stp.WriteLine("C:\Program Files\Roberts Space Industries\Star Citizen") 'Game Folder Path
+            stp.WriteLine("C:\Program Files\Roberts Space Industries\SC-Backups") 'backup path
             stp.Close()
-            ReadConfig()
+            ReadConfig(cFile)
         End If
     End Sub
-    Private Sub ReadConfig()    'reads config file into memory and to array, writes to temp0 file
-        Dim lineArray() As String = System.IO.File.ReadAllLines(cFile) 'pull lines into array
+    Private Sub ApplicationLocation()
+        'gets location of application and uses that directory to house and or create the config and temp files as needed.
+
+        Dim pArray(3) As String
+        Dim AppPath As String = Application.StartupPath() 'get application install path for use with config.txt and temp0.txt
+
+        pArray(0) = AppPath
+        pArray(1) = "config.txt"
+        pArray(2) = "temp0.txt"
+
+        cFile = pArray(0) + pArray(1)
+        tFile = pArray(0) + pArray(2)
+    End Sub
+    Private Sub ReadConfig(ByVal CPath As String)    'reads config file into memory and to array, writes to temp0 file
+        Dim lineArray() As String = System.IO.File.ReadAllLines(CPath) 'pull lines into array
         'write lines to public variables
         lDir = lineArray(0)
         gDir = lineArray(1)
         bDir = lineArray(2)
 
 
-        'write data to the temp0 config file
-        If System.IO.File.Exists(tFile) Then 'check if file exists and delete it if its already there
-            File.Delete(tFile)
-        Else
-            'create the config file
-            File.WriteAllLines(tFile, lineArray)
+        ''write data to the temp0 config file
+        'If System.IO.File.Exists(tPath) Then 'check if file exists and delete it if its already there
+        '    File.Delete(tPath)
+        'Else
+        '    'create the config file
+        '    File.WriteAllLines(tPath, lineArray)
 
-        End If
+        'End If
 
         'write the path data to the readout box
         Lbl_LaunchPath.Text = lDir
@@ -96,18 +119,18 @@ Public Class Form1
 
     End Sub
 
-    Private Sub UpdateConfig()
+    Private Sub UpdateConfig(ByVal FileToUpdate As String)
         Dim lineArray(3) As String
         lineArray(0) = lDir
         lineArray(1) = gDir
         lineArray(2) = bDir
 
-        If File.Exists(tFile) Then 'check if file exists and delete it if its already there
-            File.Delete(tFile)
+        If File.Exists(FileToUpdate) Then 'check if file exists and delete it if its already there
+            File.Delete(FileToUpdate)
         End If
 
         'create the config file
-        File.WriteAllLines(tFile, lineArray)
+        File.WriteAllLines(FileToUpdate, lineArray)
     End Sub
 
     Private Sub VerifyBackupDir()
