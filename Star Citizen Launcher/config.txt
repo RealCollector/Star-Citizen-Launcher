@@ -1,0 +1,4 @@
+
+launcher_path=J:\Games\Roberts Space Industries\RSI Launcher
+star_citizen_path=J:\Games\Roberts Space Industries\StarCitizen
+backup_config_path=J:\Games\Roberts Space Industries\SC-Backups

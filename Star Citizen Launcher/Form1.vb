@@ -1,4 +1,5 @@
 ﻿Imports System.IO
+Imports IWshRuntimeLibrary
 
 Public Class Form1
 
@@ -8,6 +9,11 @@ Public Class Form1
     Public lDir As String   'launcher path
     Public gDir As String   'game directory path
     Public bDir As String   'backup directory path
+
+    Public lDirB As String   'launcher path
+    Public gDirB As String   'game directory path
+    Public bDirB As String   'backup directory path
+
     Public cFile As String  'config File Path
     Public tFile As String  'temp0.txt file path
 
@@ -56,17 +62,30 @@ Public Class Form1
 
     Private Sub Btn_Launch_Click(sender As Object, e As EventArgs) Handles Btn_Launch.Click
         VerifyBackupDir()       'verify/create backup directory
-        BackupFiles()
-        Dim proc As New System.Diagnostics.Process()
-        Dim path As String = lDir + "\RSI Launcher.exe"
 
-        If File.Exists(path) Then 'check if file exists and delete it if its already there
-            proc = Process.Start(path, "")
-            MyBase.Dispose()
+        'run backup_files.bat
 
-        Else
-            MessageBox.Show("Could not find RSI Launcher.exe in Selected Directory")
-        End If
+        'copy over the batch files to the SC Parent dir
+
+        'create the shortcut
+        CreateShortCut(sc_start.bat, )
+
+        'Exit the installer
+        MyBase.Dispose()
+
+
+
+        'BackupFiles()
+        'Dim proc As New System.Diagnostics.Process()
+        'Dim path As String = lDir + "\RSI Launcher.exe"
+
+        'If File.Exists(path) Then 'check if file exists and delete it if its already there
+        '    proc = Process.Start(path, "")
+
+
+        'Else
+        '    MessageBox.Show("Could not find RSI Launcher.exe in Selected Directory")
+        'End If
 
     End Sub
     Private Sub VerifyConfig()
@@ -76,9 +95,9 @@ Public Class Form1
         Else
             'create the config file and set default paths
             Dim stp As New StreamWriter(cFile, True)
-            stp.WriteLine("C:\Program Files\Roberts Space Industries\RSI Launcher") 'Launcher Path
-            stp.WriteLine("C:\Program Files\Roberts Space Industries\Star Citizen") 'Game Folder Path
-            stp.WriteLine("C:\Program Files\Roberts Space Industries\SC-Backups") 'backup path
+            stp.WriteLine("launcher_path=C:\Program Files\Roberts Space Industries\RSI Launcher") 'Launcher Path
+            stp.WriteLine("star_citizen_path=C:\Program Files\Roberts Space Industries\StarCitizen") 'Game Folder Path
+            stp.WriteLine("backup_config_path=C:\Program Files\Roberts Space Industries\SC-Backups") 'backup path
             stp.Close()
             ReadConfig(cFile)
         End If
@@ -97,21 +116,23 @@ Public Class Form1
 
     End Sub
     Private Sub ReadConfig(ByVal CPath As String)    'reads config file into memory and to array, writes to temp0 file
-        Dim lineArray() As String = System.IO.File.ReadAllLines(CPath) 'pull lines into array
+        Dim lineArrayB() As String = File.ReadAllLines(CPath) 'pull lines into array
+
         'write lines to public variables
-        lDir = lineArray(0)
-        gDir = lineArray(1)
-        bDir = lineArray(2)
+        lDirB = lineArrayB(0)
+        gDirB = lineArrayB(1)
+        bDirB = lineArrayB(2)
 
 
-        ''write data to the temp0 config file
-        'If System.IO.File.Exists(tPath) Then 'check if file exists and delete it if its already there
-        '    File.Delete(tPath)
-        'Else
-        '    'create the config file
-        '    File.WriteAllLines(tPath, lineArray)
-
-        'End If
+        Dim FullPath() As String = lDirB.Split(New Char() {"="c})
+        lDir = FullPath(1)
+        FullPath = Nothing
+        FullPath = gDirB.Split(New Char() {"="c})
+        gDir = FullPath(1)
+        FullPath = Nothing
+        FullPath = bDirB.Split(New Char() {"="c})
+        bDir = FullPath(1)
+        FullPath = Nothing
 
         'write the path data to the readout box
         Lbl_LaunchPath.Text = lDir
@@ -122,9 +143,9 @@ Public Class Form1
 
     Private Sub UpdateConfig(ByVal FileToUpdate As String)
         Dim lineArray(3) As String
-        lineArray(0) = lDir
-        lineArray(1) = gDir
-        lineArray(2) = bDir
+        lineArray(0) = lDirB + "=" + lDir
+        lineArray(1) = gDirB + "=" + gDir
+        lineArray(2) = bDirB + "=" + bDir
 
         If File.Exists(FileToUpdate) Then 'check if file exists and delete it if its already there
             File.Delete(FileToUpdate)
@@ -274,6 +295,23 @@ ByVal bQuiet As Boolean = False) As Boolean
         Next
         Return True
     End Function
+    Private Function CreateShortCut(ByVal TargetName As String, ByVal ShortCutPath As String, ByVal ShortCutName As String) As Boolean
+        Dim oShell As Object
+        Dim oLink As Object
+        'you don’t need to import anything in the project reference to create the Shell Object
 
+        Try
+
+            oShell = CreateObject("WScript.Shell")
+            oLink = oShell.CreateShortcut(ShortCutPath & "\" & ShortCutName & ".lnk")
+
+            oLink.TargetPath = TargetName
+            oLink.WindowStyle = 1
+            oLink.Save()
+        Catch ex As Exception
+
+        End Try
+
+    End Function
 
 End Class

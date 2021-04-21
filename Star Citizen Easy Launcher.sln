@@ -8,7 +8,10 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{C47497D9-D853-49BE-B82E-5DD98CCB5928}"
 	ProjectSection(SolutionItems) = preProject
 		.editorconfig = .editorconfig
-		config.txt = config.txt
+		C:\Users\Nate Schnase\source\repos\starcitizen-misc\backup_files.bat = C:\Users\Nate Schnase\source\repos\starcitizen-misc\backup_files.bat
+		C:\Users\Nate Schnase\source\repos\starcitizen-misc\config.txt = C:\Users\Nate Schnase\source\repos\starcitizen-misc\config.txt
+		C:\Users\Nate Schnase\source\repos\starcitizen-misc\sc_start.bat = C:\Users\Nate Schnase\source\repos\starcitizen-misc\sc_start.bat
+		C:\Users\Nate Schnase\source\repos\starcitizen-misc\sc_start.vbs = C:\Users\Nate Schnase\source\repos\starcitizen-misc\sc_start.vbs
 	EndProjectSection
 EndProject
 Global
