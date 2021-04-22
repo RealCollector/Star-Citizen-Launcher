@@ -1,6 +1,7 @@
 ﻿Imports System.IO
 Imports IWshRuntimeLibrary
 
+
 Public Class Form1
 
 
@@ -22,7 +23,7 @@ Public Class Form1
 
     Private Sub Form1_Load(sender As Object, e As EventArgs) Handles MyBase.Load
 
-        ApplicationLocation()   'finds location of application for config path and storage
+        cFile = ApplicationLocation("config.txt")   'finds location of application for config path and storage
         VerifyConfig()          'verifys file exists and stores data to public variables
 
 
@@ -62,13 +63,16 @@ Public Class Form1
 
     Private Sub Btn_Launch_Click(sender As Object, e As EventArgs) Handles Btn_Launch.Click
         VerifyBackupDir()       'verify/create backup directory
-
-        'run backup_files.bat
-
-        'copy over the batch files to the SC Parent dir
+        Dim FilePath As String
+        FilePath = ApplicationLocation("backup_files.bat") ' returns directory with file specified
+        BatchMe(FilePath)
 
         'create the shortcut
-        CreateShortCut(sc_start.bat, )
+        Dim DesktopPath As String = Environment.GetFolderPath(Environment.SpecialFolder.Desktop)
+        FilePath = ApplicationLocation("sc_start.bat") ' returns directory with file specified
+        GenShortcut(DesktopPath, "\SC EZ LAUNCH.lnk", FilePath)
+
+        'Desktop
 
         'Exit the installer
         MyBase.Dispose()
@@ -88,8 +92,20 @@ Public Class Form1
         'End If
 
     End Sub
+
+    Private Shared Sub BatchMe(ByVal fPath As String)
+        Dim psi As New ProcessStartInfo(fPath)
+        psi.RedirectStandardError = True
+        psi.RedirectStandardOutput = True
+        psi.CreateNoWindow = False
+        psi.WindowStyle = ProcessWindowStyle.Normal
+        psi.UseShellExecute = False
+        Dim process As Process = Process.Start(psi)
+        process.WaitForExit()
+
+    End Sub
     Private Sub VerifyConfig()
-        If File.Exists(cFile) Then
+        If IO.File.Exists(cFile) Then
             'make sure files exist and read the saved data into the path variables
             ReadConfig(cFile) 'Gets data from stored file
         Else
@@ -102,21 +118,22 @@ Public Class Form1
             ReadConfig(cFile)
         End If
     End Sub
-    Private Sub ApplicationLocation()
+    Private Function ApplicationLocation(Optional ByVal FileName As String = "")
         'gets location of application and uses that directory to house and or create the config and temp files as needed.
-
+        Dim Rpath As String = ""
         Dim pArray(2) As String
         Dim AppPath As String = Application.StartupPath() 'get application install path for use with config.txt and temp0.txt
 
         pArray(0) = AppPath
-        pArray(1) = "config.txt"
+        pArray(1) = FileName
 
 
-        cFile = pArray(0) + pArray(1)
+        Rpath = pArray(0) + pArray(1)
+        Return Rpath
 
-    End Sub
+    End Function
     Private Sub ReadConfig(ByVal CPath As String)    'reads config file into memory and to array, writes to temp0 file
-        Dim lineArrayB() As String = File.ReadAllLines(CPath) 'pull lines into array
+        Dim lineArrayB() As String = IO.File.ReadAllLines(CPath) 'pull lines into array
 
         'write lines to public variables
         lDirB = lineArrayB(0)
@@ -143,16 +160,20 @@ Public Class Form1
 
     Private Sub UpdateConfig(ByVal FileToUpdate As String)
         Dim lineArray(3) As String
-        lineArray(0) = lDirB + "=" + lDir
-        lineArray(1) = gDirB + "=" + gDir
-        lineArray(2) = bDirB + "=" + bDir
+        lineArray(0) = "launcher_path=" + lDir
+        lineArray(1) = "star_citizen_path=" + gDir
+        lineArray(2) = "backup_config_path=" + bDir
 
-        If File.Exists(FileToUpdate) Then 'check if file exists and delete it if its already there
-            File.Delete(FileToUpdate)
+        'launcher_path=J:\Games\Roberts Space Industries\RSI Launcher
+        'star_citizen_path=J:\Games\Roberts Space Industries\StarCitizen
+        'backup_config_path=J:\Games\Roberts Space Industries\SC-Backups
+
+        If IO.File.Exists(FileToUpdate) Then 'check if file exists and delete it if its already there
+            IO.File.Delete(FileToUpdate)
         End If
 
         'create the config file
-        File.WriteAllLines(FileToUpdate, lineArray)
+        IO.File.WriteAllLines(FileToUpdate, lineArray)
     End Sub
 
     Private Sub VerifyBackupDir()
@@ -249,7 +270,7 @@ Public Class Form1
         If Directory.Exists(path) Then
             'Delete all files from the Directory
             For Each filepath As String In Directory.GetFiles(path)
-                File.Delete(filepath)
+                IO.File.Delete(filepath)
             Next
         End If
     End Function
@@ -295,23 +316,22 @@ ByVal bQuiet As Boolean = False) As Boolean
         Next
         Return True
     End Function
-    Private Function CreateShortCut(ByVal TargetName As String, ByVal ShortCutPath As String, ByVal ShortCutName As String) As Boolean
-        Dim oShell As Object
-        Dim oLink As Object
-        'you don’t need to import anything in the project reference to create the Shell Object
+    Private Sub GenShortcut(ByVal DesktopFolder As String, ByVal LinkName As String, ByVal Target As String)
+        Dim WshShell As WshShellClass = New WshShellClass
 
-        Try
+        Dim MyShortcut As IWshRuntimeLibrary.IWshShortcut
 
-            oShell = CreateObject("WScript.Shell")
-            oLink = oShell.CreateShortcut(ShortCutPath & "\" & ShortCutName & ".lnk")
+        ' The shortcut will be created on the desktop
 
-            oLink.TargetPath = TargetName
-            oLink.WindowStyle = 1
-            oLink.Save()
-        Catch ex As Exception
+        MyShortcut = CType(WshShell.CreateShortcut(DesktopFolder & LinkName), IWshRuntimeLibrary.IWshShortcut)
 
-        End Try
+        MyShortcut.TargetPath = Target  'Specify target file full path
 
-    End Function
+        'Use this next line to assign a icon other then the default icon for the exe
+
+        'MyShortcut.IconLocation = WSHShell.ExpandEnvironmentStrings("path to a file with an embeded icon", icon index number)
+
+        MyShortcut.Save()
+    End Sub
 
 End Class
